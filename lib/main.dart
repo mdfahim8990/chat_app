@@ -4,10 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'Login_page.dart';
 import 'controller/data_controller.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
   final DataController dataController = Get.put(DataController());
+  Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -42,8 +47,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(Duration(seconds: 3), () {
-      /*Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) =>  SignInPage()));*/
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) =>  LoginPage()));
     });
   }
 

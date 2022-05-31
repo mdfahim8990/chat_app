@@ -6,10 +6,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../model/user_model.dart';
 
-
-
-
-
 class ChatList extends StatefulWidget {
   const ChatList({Key? key}) : super(key: key);
 
@@ -21,7 +17,6 @@ class _ChatListState extends State<ChatList> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
 
-
   @override
   void initState() {
     super.initState();
@@ -30,12 +25,13 @@ class _ChatListState extends State<ChatList> {
         .doc(user!.uid)
         .get()
         .then((value) {
-      setState((){
+      setState(() {
         this.loggedInUser = UserModel.fromMap(value.data());
       });
       print("Name : ${loggedInUser}");
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -45,7 +41,7 @@ class _ChatListState extends State<ChatList> {
     ));
   }
 
-  ListView _buildListView(){
+  ListView _buildListView() {
     return ListView.builder(
       itemCount: 10,
       itemBuilder: (context, index) {
@@ -73,24 +69,28 @@ class _ChatListState extends State<ChatList> {
                     child: Text(
                       "Fahim $index",
                       style: TextStyle(
-                        fontSize: dynamicSize(0.05),),
+                        fontSize: dynamicSize(0.05),
+                      ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 4.0,left: 8),
+                    padding: const EdgeInsets.only(top: 4.0, left: 8),
                     child: Text(
                       "Have some new massage",
                       style: TextStyle(
-                        fontSize: dynamicSize(0.03),),
+                        fontSize: dynamicSize(0.03),
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
           ),
-          onTap: (){
+          onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>  MassagePage(index: index,)));
+                builder: (context) => MassagePage(
+                      index: index,
+                    )));
           },
         );
       },

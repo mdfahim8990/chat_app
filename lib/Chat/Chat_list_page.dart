@@ -1,9 +1,12 @@
 import 'package:chat_app/Chat/massage_page.dart';
-import 'package:chat_app/model/user_model.dart';
 import 'package:chat_app/public_variables/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../model/user_model.dart';
+
+
 
 
 
@@ -19,25 +22,6 @@ class _ChatListState extends State<ChatList> {
   UserModel loggedInUser = UserModel();
 
 
-
- /* void iniState(){
-
-    FirebaseFirestore.instance
-    .collection("users")
-    .doc(user!.uid)
-    .get()
-    .then((value) {
-
-      setState((){
-
-        this.loggedInUser = UserModel.fromMap(value.data());
-
-      });
-      print("Name : ${loggedInUser.name}");
-    });
-    super.initState();
-  }*/
-
   @override
   void initState() {
     super.initState();
@@ -49,7 +33,7 @@ class _ChatListState extends State<ChatList> {
       setState((){
         this.loggedInUser = UserModel.fromMap(value.data());
       });
-      print("Name : ${loggedInUser.name}");
+      print("Name : ${loggedInUser}");
     });
   }
   @override

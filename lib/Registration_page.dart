@@ -26,6 +26,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController confirmPasswordController =
       new TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -224,7 +225,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
-    Fluttertoast.showToast(msg: "Account Creat Successfully");
+    Fluttertoast.showToast(msg: "Account Create Successfully");
     Navigator.pushAndRemoveUntil((context),
         MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);
   }

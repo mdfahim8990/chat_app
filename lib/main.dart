@@ -8,9 +8,8 @@ import 'Login_page.dart';
 import 'controller/data_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() async{
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
-
   final DataController dataController = Get.put(DataController());
   Firebase.initializeApp();
   runApp(const MyApp());

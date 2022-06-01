@@ -16,10 +16,11 @@ class ChatList extends StatefulWidget {
 class _ChatListState extends State<ChatList> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
-
+  List<UserModel> loggedInUserList = [];
   @override
   void initState() {
     super.initState();
+    getData();
     FirebaseFirestore.instance
         .collection("users")
         .doc(user!.uid)
@@ -32,68 +33,84 @@ class _ChatListState extends State<ChatList> {
     });
   }
 
+   getData() async{
+    var firestore = FirebaseFirestore.instance;
+    QuerySnapshot qn = await firestore.collection("users").get();
+    // print( ' user list  ${qn.docs} ' );
+
+    qn.docs.forEach((element) {
+      loggedInUserList.add(UserModel.fromMap(element.data()));
+    });
+
+    setState(() {loggedInUserList; });
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(title: Text("${loggedInUser.name}")),
-      body: _buildListView(),
+      body: FutureBuilder(
+        builder: (_,snapshot){
+          return ListView.builder(
+            itemCount: loggedInUserList.length,
+            itemBuilder: (_, index) {
+
+              return ListTile(
+                title: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Container(
+                    height: dynamicSize(0.15),
+                    width: dynamicSize(1),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                              spreadRadius: 1,
+                              blurRadius: 2,
+                              offset: Offset(0, 2),
+                              color: Colors.black38)
+                        ]),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            " ${loggedInUserList[index].name}",
+                            style: TextStyle(
+                              fontSize: dynamicSize(0.05),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 4.0, left: 8),
+                          child: Text(
+                            "Have some new massage",
+                            style: TextStyle(
+                              fontSize: dynamicSize(0.03),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => MassagePage(
+                        index: index,
+                      )));
+                },
+              );
+            },
+          );
+        },
+      ),
     ));
   }
 
-  ListView _buildListView() {
-    return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Container(
-              height: dynamicSize(0.15),
-              width: dynamicSize(1),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: Offset(0, 2),
-                        color: Colors.black38)
-                  ]),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Fahim $index",
-                      style: TextStyle(
-                        fontSize: dynamicSize(0.05),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0, left: 8),
-                    child: Text(
-                      "Have some new massage",
-                      style: TextStyle(
-                        fontSize: dynamicSize(0.03),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => MassagePage(
-                      index: index,
-                    )));
-          },
-        );
-      },
-    );
-  }
 }

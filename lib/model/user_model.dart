@@ -1,8 +1,10 @@
+import 'massage_model.dart';
+
 class UserModel{
   String? uid;
   String? name;
   String? email;
-
+ /* MassageModel? massageModel;*/
 
   UserModel({this.uid,this.name,this.email});
 
@@ -11,7 +13,7 @@ class UserModel{
       uid: map['uid'],
       name: map['name'],
       email: map['email'],
-
+/*massageModel:map['massageModel'],*/
     );
   }
 

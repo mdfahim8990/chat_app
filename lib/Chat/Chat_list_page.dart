@@ -36,14 +36,12 @@ class _ChatListState extends State<ChatList> {
    getData() async{
     var firestore = FirebaseFirestore.instance;
     QuerySnapshot qn = await firestore.collection("users").get();
-    // print( ' user list  ${qn.docs} ' );
-
     qn.docs.forEach((element) {
       loggedInUserList.add(UserModel.fromMap(element.data()));
     });
 
     setState(() {loggedInUserList; });
-
+    print("Name : ${loggedInUserList}");
   }
 
 
@@ -102,7 +100,7 @@ class _ChatListState extends State<ChatList> {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => MassagePage(
-                        Name: "${loggedInUserList[index].name}",
+                        Name: "${loggedInUserList[index].name}", userId: '${loggedInUser.uid}', senderId: '${loggedInUserList[index].uid}',
                       )));
                 },
               );

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:chat_app/Login_page.dart';
 import 'package:chat_app/model/user_model.dart';
@@ -17,14 +16,12 @@ class RegistrationPage extends StatefulWidget {
 
 class _RegistrationPageState extends State<RegistrationPage> {
   final _auth = FirebaseAuth.instance;
-
   final _formKey = GlobalKey<FormState>();
 
   final TextEditingController nameController = new TextEditingController();
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
-  final TextEditingController confirmPasswordController =
-      new TextEditingController();
+  final TextEditingController confirmPasswordController = new TextEditingController();
 
 
   @override
@@ -221,7 +218,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     userModel.uid = user!.uid;
     userModel.name = nameController.text;
     userModel.email = user.email;
-
 
     await firebaseFirestore
         .collection("users")

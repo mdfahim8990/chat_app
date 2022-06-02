@@ -3,19 +3,21 @@ import 'package:flutter/material.dart';
 import '../public_variables/size_config.dart';
 
 class MassagePage extends StatefulWidget {
-  const MassagePage({Key? key, required this.index}) : super(key: key);
-  final int index;
+  const MassagePage({Key? key, required this.Name}) : super(key: key);
+  final String Name;
 
   @override
   State<MassagePage> createState() => _MassagePageState();
+
 }
 
 class _MassagePageState extends State<MassagePage> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          appBar: AppBar(title: Text("MR.Fahim"),),
+          appBar: AppBar(title: Text("${widget.Name}"),),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -102,7 +102,7 @@ class _ChatListState extends State<ChatList> {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => MassagePage(
-                        index: index,
+                        Name: "${loggedInUserList[index].name}",
                       )));
                 },
               );

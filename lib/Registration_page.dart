@@ -31,169 +31,171 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            Container(
-              height: dynamicSize(0.5),
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage("assets/images/clip_path_shape.png"),
-                    //fit:BoxFit.cover
-                    alignment: Alignment.topRight),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Container(
+                height: dynamicSize(0.5),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/images/clip_path_shape.png"),
+                      //fit:BoxFit.cover
+                      alignment: Alignment.topRight),
+                ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: RichText(
-                    text: TextSpan(
-                      style: TextStyle(
-                          color: Colors.black, fontSize: dynamicSize(.05)),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: 'Registration\n',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w500,
-                                fontSize: dynamicSize(.09))),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(height: dynamicSize(.03)),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: Expanded(
-                    child: Container(
-                      height: dynamicSize(0.12),
-                      child: TextFormField(
-                        controller: nameController,
-                        obscureText: false,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return ("Enter User Name");
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          nameController.text = value!;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Name*',
-                            hintStyle: TextStyle(fontSize: dynamicSize(0.04))),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: dynamicSize(.03)),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: Expanded(
-                    child: Container(
-                      height: dynamicSize(0.12),
-                      child: TextFormField(
-                        controller: emailController,
-                        obscureText: false,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return ("Please enter your Email");
-                          }
-                          if (!RegExp("@gmail.com").hasMatch(value)) {
-                            return ("Please Enter valid Email");
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          emailController.text = value!;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Email*',
-                            hintStyle: TextStyle(fontSize: dynamicSize(0.04))),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: dynamicSize(.03)),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: Expanded(
-                    child: Container(
-                      height: dynamicSize(0.12),
-                      child: TextFormField(
-                        controller: passwordController,
-                        validator: (value) {
-                          RegExp regex = new RegExp(r'^.{6,}$');
-                          if (value!.isEmpty) {
-                            return ("Password is required for login");
-                          }
-                          if (!regex.hasMatch(value)) {
-                            return ("please enter min 6 character password");
-                          }
-                        },
-                        onSaved: (value) {
-                          passwordController.text = value!;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Password*',
-                            hintStyle: TextStyle(fontSize: dynamicSize(0.04))),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: dynamicSize(.03)),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8),
-                  child: Expanded(
-                    child: Container(
-                      height: dynamicSize(0.12),
-                      child: TextFormField(
-                        controller: confirmPasswordController,
-                        validator: (value) {
-                          if (confirmPasswordController.text !=
-                              passwordController.text ) {
-                            return ("Password Not Match");
-                          }
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: ' Confirm Password*',
-                            hintStyle: TextStyle(fontSize: dynamicSize(0.04))),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: dynamicSize(.06)),
-                Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: dynamicSize(0.08)),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        signUp(emailController.text, passwordController.text);
-
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Text('Submit',
-                                style: TextStyle(fontSize: dynamicSize(0.05))),
-                          )
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                            color: Colors.black, fontSize: dynamicSize(.05)),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'Registration\n',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: dynamicSize(.09))),
                         ],
                       ),
-                    )),
-              ],
-            ),
-          ],
+                    ),
+                  ),
+                  SizedBox(height: dynamicSize(.03)),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Expanded(
+                      child: Container(
+                        height: dynamicSize(0.12),
+                        child: TextFormField(
+                          controller: nameController,
+                          obscureText: false,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return ("Enter User Name");
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            nameController.text = value!;
+                          },
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Name*',
+                              hintStyle: TextStyle(fontSize: dynamicSize(0.04))),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: dynamicSize(.03)),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Expanded(
+                      child: Container(
+                        height: dynamicSize(0.12),
+                        child: TextFormField(
+                          controller: emailController,
+                          obscureText: false,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return ("Please enter your Email");
+                            }
+                            if (!RegExp("@gmail.com").hasMatch(value)) {
+                              return ("Please Enter valid Email");
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            emailController.text = value!;
+                          },
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Email*',
+                              hintStyle: TextStyle(fontSize: dynamicSize(0.04))),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: dynamicSize(.03)),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Expanded(
+                      child: Container(
+                        height: dynamicSize(0.12),
+                        child: TextFormField(
+                          controller: passwordController,
+                          validator: (value) {
+                            RegExp regex = new RegExp(r'^.{6,}$');
+                            if (value!.isEmpty) {
+                              return ("Password is required for login");
+                            }
+                            if (!regex.hasMatch(value)) {
+                              return ("please enter min 6 character password");
+                            }
+                          },
+                          onSaved: (value) {
+                            passwordController.text = value!;
+                          },
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Password*',
+                              hintStyle: TextStyle(fontSize: dynamicSize(0.04))),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: dynamicSize(.03)),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    child: Expanded(
+                      child: Container(
+                        height: dynamicSize(0.12),
+                        child: TextFormField(
+                          controller: confirmPasswordController,
+                          validator: (value) {
+                            if (confirmPasswordController.text !=
+                                passwordController.text ) {
+                              return ("Password Not Match");
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: ' Confirm Password*',
+                              hintStyle: TextStyle(fontSize: dynamicSize(0.04))),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: dynamicSize(.06)),
+                  Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: dynamicSize(0.08)),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          signUp(emailController.text, passwordController.text);
+
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Text('Submit',
+                                  style: TextStyle(fontSize: dynamicSize(0.05))),
+                            )
+                          ],
+                        ),
+                      )),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     ));

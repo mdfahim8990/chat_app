@@ -128,7 +128,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         child: TextFormField(
                           controller: passwordController,
                           validator: (value) {
-                            RegExp regex = new RegExp(r'^.{3,}$');
+                            RegExp regex = RegExp(r'^.{6,}$');
                             if (value!.isEmpty) {
                               return ("Password is required for login");
                             }

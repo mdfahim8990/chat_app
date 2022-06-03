@@ -102,7 +102,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             if (value!.isEmpty) {
                               return ("Please enter your Email");
                             }
-                            if (!RegExp("@gmail.com").hasMatch(value)) {
+                            if (!RegExp("@").hasMatch(value)) {
                               return ("Please Enter valid Email");
                             }
                             return null;
@@ -127,7 +127,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         child: TextFormField(
                           controller: passwordController,
                           validator: (value) {
-                            RegExp regex = new RegExp(r'^.{6,}$');
+                            RegExp regex = new RegExp(r'^.{3,}$');
                             if (value!.isEmpty) {
                               return ("Password is required for login");
                             }

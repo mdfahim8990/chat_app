@@ -1,139 +1,232 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
+import '../model/massage_model.dart';
 import '../public_variables/size_config.dart';
 
 class MassagePage extends StatefulWidget {
-  const MassagePage({Key? key, required this.Name,required this.userId,required this.senderId}) : super(key: key);
-  final String Name,userId,senderId;
+  const MassagePage(
+      {Key? key,
+      required this.Name,
+      required this.userId,
+      required this.receiverId})
+      : super(key: key);
+  final String Name, userId, receiverId;
 
   @override
   State<MassagePage> createState() => _MassagePageState();
-
 }
 
 class _MassagePageState extends State<MassagePage> {
   CollectionReference chats = FirebaseFirestore.instance.collection("chats");
 
   final _formKey = GlobalKey<FormState>();
-  final _auth = FirebaseAuth.instance;
-
   final TextEditingController massage = new TextEditingController();
+
+  List<MassageModel> messageList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getMassageData();
+  }
+
+  getMassageData() async {
+    messageList.clear();
+    var firestore = FirebaseFirestore.instance;
+    QuerySnapshot qn = await firestore
+        .collection("users")
+        .doc('${widget.userId}')
+        .collection('messages')
+        .doc('chat')
+        .collection('${widget.receiverId}')
+        .get();
+    qn.docs.forEach((element) {
+      print("message : ${element.data()} list of data : ");
+//      final body = json.decode(element.data().toString());
+      // print("message : ${element.data()} list of data : ${body}");
+
+      MassageModel userdata = MassageModel.fromMap(element.data());
+
+        messageList.add(userdata);
+      print("message : ${element.data()} list of data : ${userdata.message}");
+    }
+
+    );
+
+    setState(() {
+      messageList;
+    });
+  // messageList; });
+  }
+
+  // StreamBuilder<int> streamBuilder = StreamBuilder<int>(builder)
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-          appBar: AppBar(title: Text("${widget.Name}"),),
-          body: Form(
-            key:_formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: 4,
-                    itemBuilder: (context,index)=>Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 15.0),
-                      child: Row(
-                        mainAxisAlignment: index%2==0
-                            ?MainAxisAlignment.start
-                            :MainAxisAlignment.end,
-                        crossAxisAlignment:CrossAxisAlignment.start,
-                        children: [
-                          index%2==0
-                              ?CircleAvatar(
-                            radius: dynamicSize(.04),
-                            child: Icon(Icons.person_sharp,color: Colors.white),
-                          ):Container(),
-                          SizedBox(width: 10),
-
-                          Container(
-                              width: MediaQuery.of(context).size.width*.6,
-                              child: Text(
-                                'Block G/1, 05/12, Mohammadpur, Mirpur-13, Dhaka 1216',
-                                textAlign: index%2==0
-                                    ?TextAlign.start:TextAlign.end,
-                              )),
-
-                          SizedBox(width: 10),
-                          index%2==0
-                              ?Container()
-                              :CircleAvatar(
-                            radius: dynamicSize(.04),
-                            child: Icon(Icons.person,color: Colors.white),
-                          ),
-                        ],
-                      ),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.Name),
+        ),
+        body: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: messageList.length,
+                  itemBuilder: (context, index) => Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+                    child: Row(
+                      mainAxisAlignment: getSender(index) % 2 == 0
+                          ? MainAxisAlignment.start
+                          : MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    getSender(index) % 2 == 0
+                            ? CircleAvatar(
+                                radius: dynamicSize(.04),
+                                child: Icon(Icons.person_sharp,
+                                    color: Colors.white),
+                              )
+                            : Container(),
+                        SizedBox(width: 10),
+                        Container(
+                            width: MediaQuery.of(context).size.width * .6,
+                            child: Text(
+                              messageList[index].message
+                            ,
+                              textAlign: getSender(index) % 2 == 0
+                                  ? TextAlign.start
+                                  : TextAlign.end,
+                            )),
+                        SizedBox(width: 10),
+                        getSender(index) % 2 == 0
+                            ? Container()
+                            : CircleAvatar(
+                                radius: dynamicSize(.04),
+                                child: Icon(Icons.person, color: Colors.white),
+                              ),
+                      ],
                     ),
                   ),
                 ),
+              ),
 
-                ///Message box
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5,left: 10,right: 10),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          maxLines: 5,
-                          minLines: 1,
-                          controller: massage,
-                          obscureText: false,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return ("Enter User Name");
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            massage.text = value!;
-                          },
-                          decoration: InputDecoration(
-                              fillColor:Colors.grey,
-                              filled: true,
-                              contentPadding: EdgeInsets.all(5),
-                              isDense: true,
-                              prefixIcon: Icon(Icons.chat,
-                                  size: dynamicSize(.07),
-                                  color: Colors.grey.shade700),
-                              hintText: 'Write Message...',
-
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.all(Radius.circular(50))
-                              )
-                          ),
-                        ),
+              ///Message box
+              Padding(
+                padding: const EdgeInsets.only(bottom: 5, left: 10, right: 10),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        maxLines: 5,
+                        minLines: 1,
+                        controller: massage,
+                        obscureText: false,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return ("");
+                          }
+                          return null;
+                        },
+                        onSaved: (value) {
+                          massage.text = value!;
+                        },
+                        decoration: InputDecoration(
+                            fillColor: Colors.grey,
+                            filled: true,
+                            contentPadding: EdgeInsets.all(5),
+                            isDense: true,
+                            prefixIcon: Icon(Icons.chat,
+                                size: dynamicSize(.07),
+                                color: Colors.grey.shade700),
+                            hintText: 'Write Message...',
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(50)))),
                       ),
-                      SizedBox(width: 3),
+                    ),
+                    SizedBox(width: 3),
 
-                      ///New Message
-                      IconButton(
-                          onPressed: (){
-                            if(massage.text.isEmpty){}else{sendMassage("${widget.userId}");}
+                    ///New Message
+                    IconButton(
+                        onPressed: () {
+                          if (massage.text.isEmpty) {
 
-                          },
-                          icon: Icon(Icons.send,color: Colors.blue,size: dynamicSize(.1)),
-                          splashRadius: dynamicSize(.07))
-                    ],
-                  ),
+                          } else {
+                            sendMassage("${widget.userId}");
+                              massage.text = '';
+                          }
+                        },
+                        icon: Icon(Icons.send,
+                            color: Colors.blue, size: dynamicSize(.09)),
+                        splashRadius: dynamicSize(.07))
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ),);
+        ),
+      ),
+    );
   }
 
+  String generateRandomString(int len) {
+    var r = Random();
+    return String.fromCharCodes(
+        List.generate(len, (index) => r.nextInt(33) + 89));
+  }
 
-  void sendMassage(String userId)async{
-    FirebaseFirestore.instance.collection('users').doc(userId).collection('messages').doc('chat').set({
-      'id': widget.senderId,
+  void sendMassage(String userId) async {
+    var unique_id = new DateTime.now().millisecondsSinceEpoch.toString() + generateRandomString(8);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('messages')
+        .doc('chat')
+        .collection(widget.receiverId)
+        .doc(unique_id)
+        .set({
+      'receiverId': widget.receiverId,
+      'senderId': widget.userId,
       'message': massage.text.toString(),
       'timeStamp': DateTime.now().millisecondsSinceEpoch,
     });
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.receiverId)
+        .collection('messages')
+        .doc('chat')
+        .collection(userId)
+        .doc(unique_id)
+        .set({
+      'receiverId': widget.receiverId,
+      'senderId': widget.userId,
+      'message': massage.text.toString(),
+      'timeStamp': DateTime.now().millisecondsSinceEpoch,
+    });
+
+    getMassageData();
+  }
+
+  int getSender(int index) {
+
+        if( messageList[index].senderId == widget.userId ) {
+          return 1;
+        }
+        else{
+          return 2;
+        }
   }
 }

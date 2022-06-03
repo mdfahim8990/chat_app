@@ -13,7 +13,6 @@ class UserModel{
       uid: map['uid'],
       name: map['name'],
       email: map['email'],
-/*massageModel:map['massageModel'],*/
     );
   }
 

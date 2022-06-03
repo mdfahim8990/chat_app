@@ -20,7 +20,7 @@ class _ChatListState extends State<ChatList> {
   @override
   void initState() {
     super.initState();
-    getData();
+
     FirebaseFirestore.instance
         .collection("users")
         .doc(user!.uid)
@@ -28,16 +28,24 @@ class _ChatListState extends State<ChatList> {
         .then((value) {
       setState(() {
         this.loggedInUser = UserModel.fromMap(value.data());
+        getData();
       });
       print("Name : ${loggedInUser}");
     });
   }
 
    getData() async{
+     loggedInUserList.clear();
     var firestore = FirebaseFirestore.instance;
     QuerySnapshot qn = await firestore.collection("users").get();
     qn.docs.forEach((element) {
-      loggedInUserList.add(UserModel.fromMap(element.data()));
+      UserModel userdata  = UserModel.fromMap(element.data());
+      print("message  list : ${element.data()}  ");
+
+      if(userdata.uid !=  loggedInUser.uid){
+        loggedInUserList.add(userdata);
+      }
+
     });
 
     setState(() {loggedInUserList; });
@@ -100,7 +108,7 @@ class _ChatListState extends State<ChatList> {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => MassagePage(
-                        Name: "${loggedInUserList[index].name}", userId: '${loggedInUser.uid}', senderId: '${loggedInUserList[index].uid}',
+                        Name: "${loggedInUserList[index].name}", userId: '${loggedInUser.uid}', receiverId: '${loggedInUserList[index].uid}',
                       )));
                 },
               );

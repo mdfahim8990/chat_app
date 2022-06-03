@@ -1,11 +1,8 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:get/get.dart';
-
+import '../controller/data_controller.dart';
 import '../model/massage_model.dart';
 import '../public_variables/size_config.dart';
 
@@ -33,10 +30,12 @@ class _MassagePageState extends State<MassagePage> {
   @override
   void initState() {
     super.initState();
-    getMassageData();
+    DataController.dc.checkConnectivity();
+    //getMassageData();
   }
 
   getMassageData() async {
+    DataController.dc.checkConnectivity();
     messageList.clear();
     var firestore = FirebaseFirestore.instance;
     QuerySnapshot qn = await firestore
@@ -65,8 +64,6 @@ class _MassagePageState extends State<MassagePage> {
   // messageList; });
   }
 
-  // StreamBuilder<int> streamBuilder = StreamBuilder<int>(builder)
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -74,109 +71,123 @@ class _MassagePageState extends State<MassagePage> {
         appBar: AppBar(
           title: Text(widget.Name),
         ),
-        body: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  itemCount: messageList.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-                    child: Row(
-                      mainAxisAlignment: getSender(index) % 2 == 0
-                          ? MainAxisAlignment.start
-                          : MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    getSender(index) % 2 == 0
-                            ? CircleAvatar(
+        body: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection("users")
+            .doc('${widget.userId}').collection('messages').doc('chat')
+            .collection('${widget.receiverId}').snapshots(),
+          builder: (context,snapshot) {
+            //snapshot.data!.docs[0]['me'];
+            if(snapshot.hasData){
+              return Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
+                          child: Row(
+                            mainAxisAlignment: getSender(snapshot.data!.docs[index]['senderId']) % 2 == 0
+                                ? MainAxisAlignment.start
+                                : MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              getSender(snapshot.data!.docs[index]['senderId']) % 2 == 0
+                                  ? CircleAvatar(
                                 radius: dynamicSize(.04),
                                 child: Icon(Icons.person_sharp,
                                     color: Colors.white),
                               )
-                            : Container(),
-                        SizedBox(width: 10),
-                        Container(
-                            width: MediaQuery.of(context).size.width * .6,
-                            child: Text(
-                              messageList[index].message
-                            ,
-                              textAlign: getSender(index) % 2 == 0
-                                  ? TextAlign.start
-                                  : TextAlign.end,
-                            )),
-                        SizedBox(width: 10),
-                        getSender(index) % 2 == 0
-                            ? Container()
-                            : CircleAvatar(
+                                  : Container(),
+                              SizedBox(width: 10),
+                              Container(
+                                  width: MediaQuery.of(context).size.width * .6,
+                                  child: Text(
+                                    snapshot.data!.docs[index]['message'],
+                                    textAlign: getSender(snapshot.data!.docs[index]['senderId']) % 2 == 0
+                                        ? TextAlign.start
+                                        : TextAlign.end,
+                                  )),
+                              SizedBox(width: 10),
+                              getSender(snapshot.data!.docs[index]['senderId']) % 2 == 0
+                                  ? Container()
+                                  : CircleAvatar(
                                 radius: dynamicSize(.04),
                                 child: Icon(Icons.person, color: Colors.white),
                               ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              ///Message box
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5, left: 10, right: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: TextFormField(
-                        maxLines: 5,
-                        minLines: 1,
-                        controller: massage,
-                        obscureText: false,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return ("");
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          massage.text = value!;
-                        },
-                        decoration: InputDecoration(
-                            fillColor: Colors.grey,
-                            filled: true,
-                            contentPadding: EdgeInsets.all(5),
-                            isDense: true,
-                            prefixIcon: Icon(Icons.chat,
-                                size: dynamicSize(.07),
-                                color: Colors.grey.shade700),
-                            hintText: 'Write Message...',
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50)))),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(width: 3),
 
-                    ///New Message
-                    IconButton(
-                        onPressed: () {
-                          if (massage.text.isEmpty) {
+                    ///Message box
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5, left: 10, right: 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: TextFormField(
+                              maxLines: 5,
+                              minLines: 1,
+                              controller: massage,
+                              obscureText: false,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return ("");
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                massage.text = value!;
+                              },
+                              decoration: InputDecoration(
+                                  fillColor: Colors.grey,
+                                  filled: true,
+                                  contentPadding: EdgeInsets.all(5),
+                                  isDense: true,
+                                  prefixIcon: Icon(Icons.chat,
+                                      size: dynamicSize(.07),
+                                      color: Colors.grey.shade700),
+                                  hintText: 'Write Message...',
+                                  border: const OutlineInputBorder(
+                                      borderSide: BorderSide.none,
+                                      borderRadius:
+                                      BorderRadius.all(Radius.circular(50)))),
+                            ),
+                          ),
+                          SizedBox(width: 3),
 
-                          } else {
-                            sendMassage("${widget.userId}");
-                              massage.text = '';
-                          }
-                        },
-                        icon: Icon(Icons.send,
-                            color: Colors.blue, size: dynamicSize(.09)),
-                        splashRadius: dynamicSize(.07))
+                          ///New Message
+                          IconButton(
+                              onPressed: () {
+                                if (massage.text.isEmpty) {
+
+                                } else {
+                                  sendMassage("${widget.userId}");
+                                  massage.text = '';
+                                  DataController.dc.sendNotification(widget.receiverId);
+                                }
+                              },
+                              icon: Icon(Icons.send,
+                                  color: Colors.blue, size: dynamicSize(.09)),
+                              splashRadius: dynamicSize(.07))
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ],
-          ),
+              );
+            }else if(snapshot.connectionState == ConnectionState.waiting){
+              return const Center(child: CircularProgressIndicator());
+            }else{
+              return const Center(child: Text('No chat yet'));
+            }
+
+          }
         ),
       ),
     );
@@ -220,9 +231,9 @@ class _MassagePageState extends State<MassagePage> {
     getMassageData();
   }
 
-  int getSender(int index) {
+  int getSender(String senderId) {
 
-        if( messageList[index].senderId == widget.userId ) {
+        if(senderId == widget.userId ) {
           return 1;
         }
         else{

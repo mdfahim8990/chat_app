@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -212,17 +213,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
   postDetailsToFirestore() async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
+    final FirebaseMessaging fcm = FirebaseMessaging.instance;
+    final fcmToken = await fcm.getToken();
 
     UserModel userModel = UserModel();
 
     userModel.uid = user!.uid;
     userModel.name = nameController.text;
     userModel.email = user.email;
+    userModel.token = fcmToken;
 
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
-        .set(userModel.toMap());
+        .set(userModel.toMap(),SetOptions(merge: true));
     Fluttertoast.showToast(msg: "Account Create Successfully");
     Navigator.pushAndRemoveUntil((context),
         MaterialPageRoute(builder: (context) => LoginPage()), (route) => false);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../controller/data_controller.dart';
 import '../model/user_model.dart';
 
 class ChatList extends StatefulWidget {
@@ -20,7 +21,7 @@ class _ChatListState extends State<ChatList> {
   @override
   void initState() {
     super.initState();
-
+    DataController.dc.checkConnectivity();
     FirebaseFirestore.instance
         .collection("users")
         .doc(user!.uid)
@@ -35,6 +36,7 @@ class _ChatListState extends State<ChatList> {
   }
 
    getData() async{
+     DataController.dc.checkConnectivity();
      loggedInUserList.clear();
     var firestore = FirebaseFirestore.instance;
     QuerySnapshot qn = await firestore.collection("users").get();

@@ -1,8 +1,10 @@
 import 'package:chat_app/Chat/massage_page.dart';
+import 'package:chat_app/Login_page.dart';
 import 'package:chat_app/public_variables/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 import '../controller/data_controller.dart';
 import '../model/user_model.dart';
@@ -59,7 +61,43 @@ class _ChatListState extends State<ChatList> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(title: Text("${loggedInUser.name}")),
+      appBar: AppBar(title: Text("${loggedInUser.name}"),
+          actions: <Widget>[
+          IconButton(
+          icon: const Icon(Icons.logout),
+          onPressed: () {
+           /* Navigator.of(context).pushReplacement(new MaterialPageRoute<ChatList>(
+              builder: (BuildContext context) {
+                return new LoginPage();
+              },
+            ));*/
+
+            showDialog(
+              context: context,
+              builder: (context) => new AlertDialog(
+                title: new Text('Are you sure?'),
+                content: new Text('Do you want to Logout !'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(false),
+                    child: new Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) => LoginPage()));
+                    } ,
+                    child: new Text('Yes',style: TextStyle(color: Colors.pink),),
+                  ),
+                ],
+              ),
+            );
+          },
+        ), 
+   
+      ],
+      ),
       body: FutureBuilder(
         builder: (_,snapshot){
           return ListView.builder(

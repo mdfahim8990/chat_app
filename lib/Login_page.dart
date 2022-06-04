@@ -127,6 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: () {
                           signIn(emailController.text, passwordController.text);
+                          emailController.text = '';
+                          passwordController.text = '';
                         },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,

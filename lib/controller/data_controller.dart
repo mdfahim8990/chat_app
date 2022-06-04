@@ -42,7 +42,7 @@ class DataController extends GetxController {
     }
   }
 
-  Future<void> sendNotification(String receiverId  ) async {
+  Future<void> sendNotification(String receiverId ,String receiverToken ) async {
     User? users = FirebaseAuth.instance.currentUser;
     UserModel loggedInUser = UserModel();
 /*    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(users!.uid).get().then((value) {
@@ -50,15 +50,15 @@ class DataController extends GetxController {
     });*/
 
     // DocumentSnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance.collection("users").doc(users!.uid).get();
-    FirebaseFirestore.instance
+   /* FirebaseFirestore.instance
         .collection("users")
         .doc(users!.uid)
         .get()
         .then((value) {
       loggedInUser = UserModel.fromMap(value.data());
 
-      print("Name : ${loggedInUser}");
-    });
+      print("Tokenn : ${loggedInUser.token}");
+    });*/
 
     // final List<QueryDocumentSnapshot> user = snapshot.docs;
     final String token = loggedInUser.token.toString();
@@ -67,7 +67,7 @@ class DataController extends GetxController {
       'click_action': 'FLUTTER_NOTIFICATION_CLICK',
       'id': '1',
       'status': 'done',
-      'message': '${loggedInUser.name}sent you a request',
+      'message': '${loggedInUser.name}sent you a massage',
       'sender': '',
       'receiver': receiverId,
     };
@@ -87,7 +87,7 @@ class DataController extends GetxController {
                 },
                 'priority': 'high',
                 'data': data,
-                'to': token
+                'to': receiverToken
               }));
       print('Response body: ${response.body}');
       if (response.statusCode == 200) {

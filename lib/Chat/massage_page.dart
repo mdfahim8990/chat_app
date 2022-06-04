@@ -11,9 +11,11 @@ class MassagePage extends StatefulWidget {
       {Key? key,
       required this.Name,
       required this.userId,
-      required this.receiverId})
+      required this.receiverId,
+      required this.receiverToken
+      })
       : super(key: key);
-  final String Name, userId, receiverId;
+  final String Name, userId, receiverId, receiverToken;
 
   @override
   State<MassagePage> createState() => _MassagePageState();
@@ -76,7 +78,6 @@ class _MassagePageState extends State<MassagePage> {
             .doc('${widget.userId}').collection('messages').doc('chat')
             .collection('${widget.receiverId}').snapshots(),
           builder: (context,snapshot) {
-            //snapshot.data!.docs[0]['me'];
             if(snapshot.hasData){
               return Form(
                 key: _formKey,
@@ -169,7 +170,7 @@ class _MassagePageState extends State<MassagePage> {
                                 } else {
                                   sendMassage("${widget.userId}");
                                   massage.text = '';
-                                  DataController.dc.sendNotification(widget.receiverId);
+                                  DataController.dc.sendNotification(widget.receiverId,widget.receiverToken);
                                 }
                               },
                               icon: Icon(Icons.send,

@@ -66,11 +66,7 @@ class _ChatListState extends State<ChatList> {
           IconButton(
           icon: const Icon(Icons.logout),
           onPressed: () {
-           /* Navigator.of(context).pushReplacement(new MaterialPageRoute<ChatList>(
-              builder: (BuildContext context) {
-                return new LoginPage();
-              },
-            ));*/
+
 
             showDialog(
               context: context,

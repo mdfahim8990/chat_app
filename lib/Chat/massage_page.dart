@@ -49,8 +49,6 @@ class _MassagePageState extends State<MassagePage> {
         .get();
     qn.docs.forEach((element) {
       print("message : ${element.data()} list of data : ");
-//      final body = json.decode(element.data().toString());
-      // print("message : ${element.data()} list of data : ${body}");
 
       MassageModel userdata = MassageModel.fromMap(element.data());
 

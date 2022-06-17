@@ -33,7 +33,6 @@ class _MassagePageState extends State<MassagePage> {
   void initState() {
     super.initState();
     DataController.dc.checkConnectivity();
-    //getMassageData();
   }
 
   getMassageData() async {

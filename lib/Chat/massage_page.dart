@@ -157,7 +157,6 @@ class _MassagePageState extends State<MassagePage> {
                             ),
                           ),
                           SizedBox(width: 3),
-
                           ///New Message
                           IconButton(
                               onPressed: () {
@@ -224,7 +223,6 @@ class _MassagePageState extends State<MassagePage> {
       'message': massage.text.toString(),
       'timeStamp': DateTime.now().millisecondsSinceEpoch,
     });
-
     getMassageData();
   }
 

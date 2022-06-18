@@ -51,7 +51,6 @@ class _ChatListState extends State<ChatList> {
       }
 
     });
-
     setState(() {loggedInUserList; });
     print("Name : ${loggedInUserList}");
   }

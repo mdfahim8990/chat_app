@@ -9,7 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({Key? key}) : super(key: key);
+  const RegistrationPage({Key key}) : super(key: key);
 
   @override
   State<RegistrationPage> createState() => _RegistrationPageState();
@@ -74,13 +74,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           controller: nameController,
                           obscureText: false,
                           validator: (value) {
-                            if (value!.isEmpty) {
+                            if (value.isEmpty) {
                               return ("Enter User Name");
                             }
                             return null;
                           },
                           onSaved: (value) {
-                            nameController.text = value!;
+                            nameController.text = value??'';
                           },
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -100,7 +100,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           controller: emailController,
                           obscureText: false,
                           validator: (value) {
-                            if (value!.isEmpty) {
+                            if (value.isEmpty) {
                               return ("Please enter your Email");
                             }
                             if (!RegExp("@").hasMatch(value)) {
@@ -109,7 +109,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             return null;
                           },
                           onSaved: (value) {
-                            emailController.text = value!;
+                            emailController.text = value??'';
                           },
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -129,7 +129,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           controller: passwordController,
                           validator: (value) {
                             RegExp regex = RegExp(r'^.{6,}$');
-                            if (value!.isEmpty) {
+                            if (value.isEmpty && value == null) {
                               return ("Password is required for login");
                             }
                             if (!regex.hasMatch(value)) {
@@ -137,7 +137,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             }
                           },
                           onSaved: (value) {
-                            passwordController.text = value!;
+                            passwordController.text = value??'';
                           },
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -200,25 +200,25 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void signUp(String email, String password) async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState.validate()) {
       await _auth
           .createUserWithEmailAndPassword(email: email, password: password)
           .then((value) => {postDetailsToFirestore()})
           .catchError((e) {
-        Fluttertoast.showToast(msg: e!.message);
+        Fluttertoast.showToast(msg: e.message);
       });
     }
   }
 
   postDetailsToFirestore() async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-    User? user = _auth.currentUser;
+    User user = _auth.currentUser;
     final FirebaseMessaging fcm = FirebaseMessaging.instance;
     final fcmToken = await fcm.getToken();
 
     UserModel userModel = UserModel();
 
-    userModel.uid = user!.uid;
+    userModel.uid = user.uid;
     userModel.name = nameController.text;
     userModel.email = user.email;
     userModel.token = fcmToken;

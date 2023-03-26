@@ -1,8 +1,8 @@
 class MassageModel {
-  dynamic? timeStamp;
-  dynamic? senderId;
-  dynamic? receiverId;
-  dynamic? message;
+  dynamic timeStamp;
+  dynamic senderId;
+  dynamic receiverId;
+  dynamic message;
 
   MassageModel({this.timeStamp, this.senderId, this.receiverId, this.message});
 

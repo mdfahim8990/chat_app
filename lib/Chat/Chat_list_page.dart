@@ -10,14 +10,14 @@ import '../controller/data_controller.dart';
 import '../model/user_model.dart';
 
 class ChatList extends StatefulWidget {
-  const ChatList({Key? key}) : super(key: key);
+  const ChatList({Key key}) : super(key: key);
 
   @override
   State<ChatList> createState() => _ChatListState();
 }
 
 class _ChatListState extends State<ChatList> {
-  User? user = FirebaseAuth.instance.currentUser;
+  User user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
   List<UserModel> loggedInUserList = [];
   @override
@@ -26,7 +26,7 @@ class _ChatListState extends State<ChatList> {
     DataController.dc.checkConnectivity();
     FirebaseFirestore.instance
         .collection("users")
-        .doc(user!.uid)
+        .doc(user.uid)
         .get()
         .then((value) {
       setState(() {

@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:chat_app/Chat/Chat_list_page.dart';
 import 'package:chat_app/Registration_page.dart';
@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({Key key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                           controller: emailController,
                           obscureText: false,
                           validator: (value) {
-                            if (value!.isEmpty) {
+                            if (value.isEmpty) {
                               return ("Please enter your Email");
                             }
                             if (!RegExp("@gmail.com").hasMatch(value)) {
@@ -79,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                           onSaved: (value) {
-                            emailController.text = value!;
+                            emailController.text = value;
                           },
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                           obscureText: true,
                           validator: (value) {
                             RegExp regex = new RegExp(r'^.{6,}$');
-                            if (value!.isEmpty) {
+                            if (value.isEmpty && value == null) {
                               return ("Password is required for login");
                             }
                             if (!regex.hasMatch(value)) {
@@ -109,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                             }
                           },
                           onSaved: (value) {
-                            passwordController.text = value!;
+                            passwordController.text = value??'';
                           },
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -174,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void signIn(String email, String password) async {
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState.validate()) {
       await _auth
           .signInWithEmailAndPassword(email: email, password: password)
           .then((uid) => {
@@ -183,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                     .push(MaterialPageRoute(builder: (_) => const ChatList())),
               })
           .catchError((e) {
-        Fluttertoast.showToast(msg: e!.message);
+        Fluttertoast.showToast(msg: e.message);
       });
     }
   }

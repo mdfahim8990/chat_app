@@ -28,8 +28,8 @@ class NotificationService{
 
       await _flutterLocalNotificationsPlugin.show(
           id,
-          message.notification!.title,
-          message.notification!.body,
+          message.notification.title,
+          message.notification.body,
           notificationDetails);
     }catch(e){
       print('Error>>>$e');

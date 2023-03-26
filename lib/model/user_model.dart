@@ -1,10 +1,10 @@
 import 'massage_model.dart';
 
 class UserModel{
-  String? uid;
-  String? name;
-  String? email;
-  String? token;
+  String uid = '';
+  String name ='';
+  String email ='';
+  String token ='';
 
 
   UserModel({this.uid,this.name,this.email,this.token});

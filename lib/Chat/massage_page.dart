@@ -7,11 +7,11 @@ import '../public_variables/size_config.dart';
 
 class MassagePage extends StatefulWidget {
   const MassagePage(
-      {Key? key,
-      required this.Name,
-      required this.userId,
-      required this.receiverId,
-      required this.receiverToken
+      {Key key,
+       this.Name,
+       this.userId,
+       this.receiverId,
+       this.receiverToken
       })
       : super(key: key);
   final String Name, userId, receiverId, receiverToken;
@@ -81,16 +81,16 @@ class _MassagePageState extends State<MassagePage> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
+                        itemCount: snapshot.data.docs.length,
                         itemBuilder: (context, index) => Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
                           child: Row(
-                            mainAxisAlignment: getSender(snapshot.data!.docs[index]['senderId']) % 2 == 0
+                            mainAxisAlignment: getSender(snapshot.data.docs[index]['senderId']) % 2 == 0
                                 ? MainAxisAlignment.start
                                 : MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              getSender(snapshot.data!.docs[index]['senderId']) % 2 == 0
+                              getSender(snapshot.data.docs[index]['senderId']) % 2 == 0
                                   ? CircleAvatar(
                                 radius: dynamicSize(.04),
                                 child: Icon(Icons.person_sharp,
@@ -101,13 +101,13 @@ class _MassagePageState extends State<MassagePage> {
                               Container(
                                   width: MediaQuery.of(context).size.width * .6,
                                   child: Text(
-                                    snapshot.data!.docs[index]['message'],
-                                    textAlign: getSender(snapshot.data!.docs[index]['senderId']) % 2 == 0
+                                    snapshot.data.docs[index]['message'],
+                                    textAlign: getSender(snapshot.data.docs[index]['senderId']) % 2 == 0
                                         ? TextAlign.start
                                         : TextAlign.end,
                                   )),
                               SizedBox(width: 10),
-                              getSender(snapshot.data!.docs[index]['senderId']) % 2 == 0
+                              getSender(snapshot.data.docs[index]['senderId']) % 2 == 0
                                   ? Container()
                                   : CircleAvatar(
                                 radius: dynamicSize(.04),
@@ -132,13 +132,13 @@ class _MassagePageState extends State<MassagePage> {
                               controller: massage,
                               obscureText: false,
                               validator: (value) {
-                                if (value!.isEmpty) {
+                                if (value.isEmpty) {
                                   return ("");
                                 }
                                 return null;
                               },
                               onSaved: (value) {
-                                massage.text = value!;
+                                massage.text = value;
                               },
                               decoration: InputDecoration(
                                   fillColor: Colors.grey,

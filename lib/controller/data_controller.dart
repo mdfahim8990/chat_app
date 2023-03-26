@@ -42,7 +42,7 @@ class DataController extends GetxController {
   }
 
   Future<void> sendNotification(String receiverId ,String receiverToken ) async {
-    User? users = FirebaseAuth.instance.currentUser;
+    User users = FirebaseAuth.instance.currentUser;
     UserModel loggedInUser = UserModel();
 /*    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(users!.uid).get().then((value) {
         loggedInUser = UserModel.fromMap(value.data());

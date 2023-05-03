@@ -65,8 +65,6 @@ class _ChatListState extends State<ChatList> {
           IconButton(
           icon: const Icon(Icons.logout),
           onPressed: () {
-
-
             showDialog(
               context: context,
               builder: (context) => new AlertDialog(
@@ -94,10 +92,10 @@ class _ChatListState extends State<ChatList> {
       ],
       ),
       body: FutureBuilder(
-        builder: (_,snapshot){
+        builder: (context,snapshot){
           return ListView.builder(
             itemCount: loggedInUserList.length,
-            itemBuilder: (_, index) {
+            itemBuilder: (context, index) {
 
               return ListTile(
                 title: Padding(

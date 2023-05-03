@@ -93,8 +93,7 @@ class _MassagePageState extends State<MassagePage> {
                               getSender(snapshot.data.docs[index]['senderId']) % 2 == 0
                                   ? CircleAvatar(
                                 radius: dynamicSize(.04),
-                                child: Icon(Icons.person_sharp,
-                                    color: Colors.white),
+                                child: const Icon(Icons.person_sharp, color: Colors.white),
                               )
                                   : Container(),
                               SizedBox(width: 10),

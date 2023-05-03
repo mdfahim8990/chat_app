@@ -67,7 +67,7 @@ class _ChatListState extends State<ChatList> {
           onPressed: () {
             showDialog(
               context: context,
-              builder: (context) => new AlertDialog(
+              builder: (context) => AlertDialog(
                 title: new Text('Are you sure?'),
                 content: new Text('Do you want to Logout !'),
                 actions: <Widget>[
@@ -106,7 +106,7 @@ class _ChatListState extends State<ChatList> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white,
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                               spreadRadius: 1,
                               blurRadius: 2,

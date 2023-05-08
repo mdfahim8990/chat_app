@@ -37,7 +37,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               Container(
                 height: dynamicSize(0.5),
                 width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/images/clip_path_shape.png"),
                       //fit:BoxFit.cover
